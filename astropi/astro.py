@@ -2,6 +2,11 @@ from exif import Image
 from datetime import datetime
 import cv2
 import math
+from picamera import PiCamera
+from time import sleep
+
+camera = PiCamera()
+camera.resolution = (2592, 1944)
 
 def get_time(image):
     with open(image, 'rb') as image_file:
@@ -39,8 +44,8 @@ def calculate_matches(descriptors_1, descriptors_2):
     return matches
 
 
-image_1 = 'photo_0683.jpg'
-image_2 = 'photo_0684.jpg'
+image_1 = ''
+image_2 = ''
 
 
 def display_matches(image_1_cv, keypoints_1, image_2_cv, keypoints_2, matches):
@@ -80,13 +85,25 @@ def calculate_speed_in_kmps(feature_distance, GSD, time_difference):
     speed = distance / time_difference
     return speed
 
+camera.capture(f'image_{0:03d}.jpg')
+sleep(5)
+srednia=0
 
-time_difference = get_time_difference(image_1, image_2) # Get time difference between images
-image_1_cv, image_2_cv = convert_to_cv(image_1, image_2) # Create OpenCV image objects
-keypoints_1, keypoints_2, descriptors_1, descriptors_2 = calculate_features(image_1_cv, image_2_cv, 1000) # Get keypoints and descriptors
-matches = calculate_matches(descriptors_1, descriptors_2) # Match descriptors
-display_matches(image_1_cv, keypoints_1, image_2_cv, keypoints_2, matches) # Display matches
-coordinates_1, coordinates_2 = find_matching_coordinates(keypoints_1, keypoints_2, matches)
-average_feature_distance = calculate_mean_distance(coordinates_1, coordinates_2)
-speed = calculate_speed_in_kmps(average_feature_distance, 12648, time_difference)
-print(speed)
+for i in range(9):
+    camera.capture(f'image_{i+1:03d}.jpg')
+    image_1 = (f'image_{i:03d}.jpg')
+    image_2 = (f'image_{i+1:03d}.jpg')
+    time_difference = get_time_difference(image_1, image_2) # Get time difference between images
+    image_1_cv, image_2_cv = convert_to_cv(image_1, image_2) # Create OpenCV image objects
+    keypoints_1, keypoints_2, descriptors_1, descriptors_2 = calculate_features(image_1_cv, image_2_cv, 1000) # Get keypoints and descriptors
+    matches = calculate_matches(descriptors_1, descriptors_2) # Match descriptors
+    #display_matches(image_1_cv, keypoints_1, image_2_cv, keypoints_2, matches) # Display matches
+    coordinates_1, coordinates_2 = find_matching_coordinates(keypoints_1, keypoints_2, matches)
+    average_feature_distance = calculate_mean_distance(coordinates_1, coordinates_2)
+    speed = calculate_speed_in_kmps(average_feature_distance, 12648, time_difference)
+    if(i==0):
+        srednia=speed
+    else:
+        srednia=(srednia+speed)/2
+    print(speed)
+    sleep(5)
