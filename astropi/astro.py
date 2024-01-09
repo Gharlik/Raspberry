@@ -85,14 +85,23 @@ def calculate_speed_in_kmps(feature_distance, GSD, time_difference):
     speed = distance / time_difference
     return speed
 
-camera.capture(f'image_{0:03d}.jpg')
-sleep(5)
-srednia=0
+
+
+img_nr = 0
+srednia = 0
+predkosc=[]
+img_name = "image_" + str(img_nr) + ".jpg"
+camera.capture(img_name)
+img_nr += 1
+
 
 for i in range(9):
-    camera.capture(f'image_{i+1:03d}.jpg')
-    image_1 = (f'image_{i:03d}.jpg')
-    image_2 = (f'image_{i+1:03d}.jpg')
+    sleep(5)
+    image_1 = (img_name)
+    img_name = "image_" + str(img_nr) + ".jpg"
+    camera.capture(img_name)
+    image_2 = (img_name)
+    img_nr += 1
     time_difference = get_time_difference(image_1, image_2) # Get time difference between images
     image_1_cv, image_2_cv = convert_to_cv(image_1, image_2) # Create OpenCV image objects
     keypoints_1, keypoints_2, descriptors_1, descriptors_2 = calculate_features(image_1_cv, image_2_cv, 1000) # Get keypoints and descriptors
@@ -101,9 +110,11 @@ for i in range(9):
     coordinates_1, coordinates_2 = find_matching_coordinates(keypoints_1, keypoints_2, matches)
     average_feature_distance = calculate_mean_distance(coordinates_1, coordinates_2)
     speed = calculate_speed_in_kmps(average_feature_distance, 12648, time_difference)
-    if(i==0):
-        srednia=speed
-    else:
-        srednia=(srednia+speed)/2
-    print(speed)
-    sleep(5)
+    predkosc.append(speed)
+
+
+for x in predkosc:
+    print (x)
+    srednia+=x
+
+print(srednia/len(predkosc))
