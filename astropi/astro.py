@@ -7,7 +7,8 @@ from time import sleep
 
 camera = PiCamera()
 camera.resolution = (2592, 1944)
-
+camera.start_preview()
+sleep(1)
 def get_time(image):
     with open(image, 'rb') as image_file:
         img = Image(image_file)
