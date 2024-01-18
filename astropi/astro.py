@@ -4,10 +4,13 @@ import cv2
 import math
 from picamera import PiCamera
 from time import sleep
+from pathlib import Path
+
+base_folder = Path(__file__).parent.resolve()
 
 camera = PiCamera()
 camera.resolution = (2592, 1944)
-camera.start_preview()
+#camera.start_preview()
 sleep(1)
 def get_time(image):
     with open(image, 'rb') as image_file:
@@ -94,10 +97,10 @@ predkosc=[]
 img_name = "image_" + str(img_nr) + ".jpg"
 camera.capture(img_name)
 img_nr += 1
-
+#camera.stop_preview()
 
 for i in range(9):
-    sleep(5)
+    sleep(50)
     image_1 = (img_name)
     img_name = "image_" + str(img_nr) + ".jpg"
     camera.capture(img_name)
@@ -120,8 +123,7 @@ for x in predkosc:
 srednia=suma/len(predkosc)
 srednia_formatted = "{:.4f}".format(srednia)
 output_string = srednia_formatted
-file_path = "result.txt"  # Replace with your desired file path
+file_path = base_folder / "result.txt"
 with open(file_path, 'w') as file:
     file.write(output_string)
 
-print("Data written to", file_path)
