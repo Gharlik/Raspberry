@@ -89,7 +89,7 @@ def calculate_speed_in_kmps(feature_distance, GSD, time_difference):
 
 
 img_nr = 0
-srednia = 0
+suma = 0
 predkosc=[]
 img_name = "image_" + str(img_nr) + ".jpg"
 camera.capture(img_name)
@@ -115,7 +115,13 @@ for i in range(9):
 
 
 for x in predkosc:
-    print (x)
-    srednia+=x
+    suma+=x
 
-print(srednia/len(predkosc))
+srednia=suma/len(predkosc)
+srednia_formatted = "{:.4f}".format(srednia)
+output_string = srednia_formatted
+file_path = "result.txt"  # Replace with your desired file path
+with open(file_path, 'w') as file:
+    file.write(output_string)
+
+print("Data written to", file_path)
