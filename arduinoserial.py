@@ -3,7 +3,17 @@ import time
 import serial
 import threading
 import sys
-ser = serial.Serial('/dev/ttyAMA0',9600,timeout=1)
+
+ser = serial.Serial(
+
+    port='/dev/ttyAMA0',
+    baudrate=9600,
+    parity=serial.PARITY_NONE,
+    stopbits=serial.STOPBITS_ONE,
+    bytesize=serial.EIGHTBITS,
+    timeout=1
+)
+counter = 0
 def odbiez():
     while True:
         if ser.in_waiting >0:
@@ -12,7 +22,7 @@ def odbiez():
 
 def nadaj():
     while True:
-        ser.write("hello")
+        ser.write(str.encode("hello"))
         time.sleep(1)
 
 t1=threading.Thread(target=odbiez)
