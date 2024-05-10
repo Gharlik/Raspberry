@@ -22,7 +22,7 @@ def odbiez():
 
 def nadaj():
     while True:
-        ser.write(str.encode("hello"))
+        ser.write(str.encode("0"))
         time.sleep(1)
 
 t1=threading.Thread(target=odbiez)
