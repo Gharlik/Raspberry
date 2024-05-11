@@ -21,8 +21,10 @@ def odbiez():
             print(line)
 
 def nadaj():
+    a="1"
     while True:
-        ser.write(str.encode("0"))
+        ser.write(str.encode(a))
+        a=str(int(a)+1)
         time.sleep(1)
 
 t1=threading.Thread(target=odbiez)

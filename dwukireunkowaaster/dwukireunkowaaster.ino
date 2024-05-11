@@ -2,6 +2,7 @@
 #include <nRF24L01.h>
 #include <RF24.h>
 
+
  #define CE_PIN  9
  #define CSN_PIN 10
 
@@ -36,10 +37,10 @@ void loop()
 {
 
   if(Serial.available()){
-    data =Serial.read();
+    String d =&Serial.readStringUntil('\n')[0];
+    data=atoi(&d[0]);
     Serial.println("nadawanie");
     Serial.println(data);
-
     delay(2);
     radio.stopListening();  
     radio.write( data, sizeof(data) );
