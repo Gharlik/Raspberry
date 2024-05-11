@@ -10,7 +10,7 @@
 const byte pipe [][6] = {"00006", "00003"};
 
 RF24 radio(CE_PIN, CSN_PIN);
-int data;
+int data[1];
 short int channel = 200;
 uint8_t adres[2] = {0, 1};
 
@@ -32,18 +32,18 @@ Serial.println("start");
 }
 
 
-int odebrane;
+int odebrane[1];
 void loop()
 {
 
   if(Serial.available()){
     String d =&Serial.readStringUntil('\n')[0];
-    data=atoi(&d[0]);
+    data[0]=atoi(&d[0]);
     Serial.println("nadawanie");
-    Serial.println(data);
+    Serial.println(data[0]);
     delay(2);
     radio.stopListening();  
-    radio.write( data, sizeof(data) );
+    radio.write( data, sizeof(data[0]) );
     delay(2);
     radio.startListening();
   }
@@ -52,7 +52,7 @@ void loop()
     {
       radio.read( odebrane, sizeof(odebrane) );
       Serial.println("odebrano");
-      Serial.println(odebrane);
+      Serial.println(odebrane[0]);
     }
 }
 
