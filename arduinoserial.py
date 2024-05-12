@@ -1,5 +1,5 @@
 import time
-
+import struct
 import serial
 import threading
 import sys
@@ -14,16 +14,21 @@ ser = serial.Serial(
     timeout=1
 )
 counter = 0
+size=struct.calcsize('f')
 def odbiez():
     while True:
         if ser.in_waiting >0:
-            line=ser.readline().decode('utf-8').rstrip()
-            print(line)
+            line=ser.read(size)
+            data=struct.unpack('f',line)
+            print("odebrano")
+            print(data[0])
 
 def nadaj():
     a=1
     while True:
         ser.write(str.encode("%d\n"%(a)))
+        print("nadano")
+        print(a)
         a=a+1
         time.sleep(1)
 
