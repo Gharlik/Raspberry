@@ -26,7 +26,8 @@ def odbiez():
 def nadaj():
     a=1
     while True:
-        ser.write(str.encode("%d\n"%(a)))
+        #ser.write(str.encode("%d\n"%(a)))
+        ser.write(struct.pack('f',a))
         print("nadano")
         print(a)
         a=a+1

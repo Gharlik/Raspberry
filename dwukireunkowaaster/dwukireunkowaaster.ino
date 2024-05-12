@@ -33,8 +33,9 @@ void loop()
 {
 
   if(Serial.available()){
-    String d =&Serial.readStringUntil('\n')[0];
-    data.a=atoi(&d[0]);
+    //String d =&Serial.readStringUntil('\n')[0];
+    //data.a=atoi(&d[0]);
+    Serial.readBytes((char*)&data,sizeof(struct Data));
     delay(2);
     radio.stopListening();  
     radio.write( &data, sizeof(Data) );
